@@ -1,4 +1,5 @@
 const Event = require('../models/Event');
+const Booking = require('../models/Booking');
 
 // Homepage events
 const getAllEvents = async (req, res) =>
@@ -141,6 +142,14 @@ const deleteEvent = async (req, res) =>
 {
     try
     {
+        // Prevent deleting events with bookings
+        const existingBookings = await Booking.findOne({ event: req.params.id });
+
+        if (existingBookings)
+        {
+            return res.send('Cannot delete event with existing bookings.');
+        }
+
         await Event.findByIdAndDelete(req.params.id);
 
         res.redirect('/events/admin/manage');

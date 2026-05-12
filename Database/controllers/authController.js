@@ -80,7 +80,7 @@ const registerUser = async (req, res) =>
             return res.render('register',
             {
                 title: 'Register',
-                error: 'Email already exists'
+                error: 'Email already exists.'
             });
         }
 
@@ -97,7 +97,7 @@ const registerUser = async (req, res) =>
         res.render('register',
         {
             title: 'Register',
-            error: 'Registration failed'
+            error: 'Registration failed.'
         });
     }
 }; //registerUser

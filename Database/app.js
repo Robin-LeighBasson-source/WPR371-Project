@@ -83,10 +83,11 @@ app.get('/dashboard', requireAuth, async (req, res) =>
         const bookings = await Booking.find({ user: req.session.user.id }).populate('event');
 
         const formattedBookings = bookings.map(b =>
-        ({
-            eventTitle: b.event.title,
-            date: new Date(b.bookingDate).toDateString()
-        }));
+            ({
+                id: b._id,
+                eventTitle: b.event.title,
+                date: new Date(b.bookingDate).toDateString()
+            }));
 
         res.render('dashboard',
         {
@@ -99,7 +100,7 @@ app.get('/dashboard', requireAuth, async (req, res) =>
     } catch (err)
     {
         console.error(err);
-        res.send('Dashboard error');
+        res.send('Dashboard error.');
     }
 });
 
@@ -139,4 +140,4 @@ async function createTestAdmin()
     }
 }//createTestAdmin
 
-createTestAdmin();
+//createTestAdmin();

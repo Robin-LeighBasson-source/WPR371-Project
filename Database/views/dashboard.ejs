@@ -27,7 +27,10 @@
     <% bookings.forEach(b =>
     { %>
       <div class="card">
-        <p><%= b.eventTitle %> |<%= b.date %></p>
+        <p><%= b.eventTitle %> | <%= b.date %></p>
+        <form action="/bookings/cancel/<%= b.id %>" method="POST">
+        <button type="submit">Cancel Booking</button>
+        </form>
       </div>
     <% }) %>
   <% } else
