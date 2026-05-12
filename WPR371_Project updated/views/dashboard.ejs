@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>dashboard</title>
+    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+
+    <body>
+        <div class="container">
+            <h1>Book Tickets</h1>
+
+            <form action="/bookings/create" method="POST">
+                <select name="eventId">
+                    <% events.forEach(event => { %>
+                    <option value="<%= event._id %>"><%= event.title %></option>
+                    <% }) %>
+                </select>
+                <button type="submit">Book Ticket</button>
+            </form>
+
+            <h2>My Bookings</h2>
+            <% bookings.forEach(b => { %>
+            <div class="card">
+                <p><%= b.eventTitle %> | <%= b.date %></p>
+            </div>
+            <% }) %>
+
+            <% if(user.role === 'admin'){ %>
+                <h2>Admin Analytics</h2>
+                <div class="card">
+                    <p>Total Bookings: <%= analytics.totalBookings %></p>
+                    <p>Popular Event: <%= analytics.popularEvent %></p>
+                    <p>Capacity Usage: <%= analytics.capacityUsage %>%</p>
+                </div>
+            </div>
+            <% } %>
+        </div>
+
+    </body>
+</html>
