@@ -1,0 +1,14 @@
+<div class="container">
+    <h1><%= event.title %></h1>
+
+    <p><strong>Category:</strong><%= event.category %></p>
+    <p><strong>Date:</strong><%= new Date(event.date).toDateString() %></p>
+    <p><strong>Location:</strong><%= event.location %></p>
+    <p><strong>Description:</strong></p>
+    <p><%= event.description %></p>
+    <p><strong>Tickets Sold:</strong><%= event.ticketsSold %>/<%= event.totalCapacity %></p>
+
+    <br>
+    
+    <a href="/" class="btn">Back to Events</a>
+</div>

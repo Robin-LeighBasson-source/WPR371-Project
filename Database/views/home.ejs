@@ -1,0 +1,21 @@
+<div class="container">
+  <h1>Available Events</h1>
+  <form method="GET" action="/events/search">
+    <input type="text" name="search" placeholder="Search events..." />
+    <select name="category">
+      <option value="">All Categories</option>
+      <option value="Technology">Technology</option>
+      <option value="Music">Music</option>
+      <option value="Business">Business</option>
+    </select>
+    <button type="submit">Filter</button>
+  </form>
+
+  <% events.forEach(event => { %>
+    <div class="card">
+      <h3><%= event.title %></h3>
+      <p><%= new Date(event.date).toDateString() %> | <%= event.category %></p>
+      <a href="/events/<%= event._id %>" class="btn">View Details</a>
+    </div>
+  <% }) %>
+</div>

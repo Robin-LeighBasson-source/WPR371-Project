@@ -1,0 +1,54 @@
+<div class="container">
+  <h1>Welcome, <%= user.name %></h1>
+  <h2>Book Tickets</h2>
+
+  <% if(events && events.length > 0)
+  { %>
+    <form action="/bookings/create" method="POST">
+      <select name="eventId">
+        <% events.forEach(event =>
+        { %>
+          <option value="<%= event._id %>"><%= event.title %></option>
+        <% }) %>
+      </select>
+
+      <button type="submit">Book Ticket</button>
+    </form>
+
+  <% } else
+  { %>
+    <p>No events available.</p>
+  <% } %>
+
+  <h2>My Bookings</h2>
+
+  <% if(bookings && bookings.length > 0)
+  { %>
+    <% bookings.forEach(b =>
+    { %>
+      <div class="card">
+        <p><%= b.eventTitle %> | <%= b.date %></p>
+        <form action="/bookings/cancel/<%= b.id %>" method="POST">
+        <button type="submit">Cancel Booking</button>
+        </form>
+      </div>
+    <% }) %>
+  <% } else
+  { %>
+    <p>No bookings yet.</p>
+  <% } %>
+
+  <% if(user.role === 'admin' && analytics)
+  { %>
+    <h2>Admin Analytics</h2>
+
+    <div class="card">
+      <p>Total Bookings:<%= analytics.totalBookings %></p>
+      <p>Popular Event:<%= analytics.popularEvent %></p>
+      <p>Capacity Usage:<%= analytics.capacityUsage %>%</p>
+    </div>
+  <% } %>
+  <br>
+
+  <a href="/auth/logout">Logout</a>
+</div>
