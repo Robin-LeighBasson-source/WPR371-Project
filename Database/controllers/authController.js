@@ -11,7 +11,17 @@ const getLogin = (req, res) =>
     });
 };
 
-// Handle login
+// Render register page
+const getRegister = (req, res) =>
+{
+    res.render('register',
+    {
+        title: 'Register',
+        error: null
+    });
+};
+
+// Handle user login
 const loginUser = async (req, res) =>
 {
     try
@@ -56,6 +66,42 @@ const loginUser = async (req, res) =>
     }
 }; //loginUser
 
+// Register user
+const registerUser = async (req, res) =>
+{
+    try
+    {
+        const { name, email, password } = req.body;
+
+        const existingUser = await User.findOne({ email });
+
+        if (existingUser)
+        {
+            return res.render('register',
+            {
+                title: 'Register',
+                error: 'Email already exists'
+            });
+        }
+
+        const newUser = new User({ name, email, password });
+
+        await newUser.save();
+
+        res.redirect('/auth/login');
+
+    } catch (err)
+    {
+        console.error(err);
+
+        res.render('register',
+        {
+            title: 'Register',
+            error: 'Registration failed'
+        });
+    }
+}; //registerUser
+
 // Logout
 const logoutUser = (req, res) =>
 {
@@ -65,9 +111,4 @@ const logoutUser = (req, res) =>
     });
 };
 
-module.exports =
-{
-    getLogin,
-    loginUser,
-    logoutUser
-};
+module.exports = { getLogin, loginUser, logoutUser, getRegister, registerUser };

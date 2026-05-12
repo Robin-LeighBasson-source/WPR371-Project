@@ -1,22 +1,27 @@
 const mongoose = require('mongoose');
 
-const eventSchema = new mongoose.Schema({
-    title: {
+const eventSchema = new mongoose.Schema(
+{
+    title:
+    {
         type: String,
         required: true
     },
     description: String,
     category: String,
-    date: {
+    date:
+    {
         type: Date,
         required: true
     },
     location: String,
-    totalCapacity: {
+    totalCapacity:
+    {
         type: Number,
         required: true
     },
-    ticketsSold: {
+    ticketsSold:
+    {
         type: Number,
         default: 0
     }

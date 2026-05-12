@@ -1,15 +1,12 @@
 <div class="container">
   <h1>Available Events</h1>
   <form method="GET" action="/events/search">
-    <input type="text" name="keyword" placeholder="Search events..." />
+    <input type="text" name="search" placeholder="Search events..." />
     <select name="category">
       <option value="">All Categories</option>
-      <option value="conference">Conference</option>
-      <option value="music">Music</option>
-      <option value="sports">Sports</option>
-      <option value="theater">Theater</option>
-      <option value="workshop">Workshop</option>
-      
+      <option value="Technology">Technology</option>
+      <option value="Music">Music</option>
+      <option value="Business">Business</option>
     </select>
     <button type="submit">Filter</button>
   </form>

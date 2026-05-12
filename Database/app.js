@@ -13,6 +13,7 @@ const Booking = require('./models/Booking');
 const Enquiry = require('./models/Enquiry');
 const eventRoutes = require('./routes/eventRoutes');
 const authRoutes = require('./routes/authRoutes');
+const requireAuth = require('./middleware/authMiddleware');
 
 // Initialize app
 const app = express();
@@ -61,7 +62,6 @@ app.get('/', async (req, res) =>
             title: 'Home',
             events
         });
-
     } catch (err)
     {
         console.error(err);
@@ -69,22 +69,38 @@ app.get('/', async (req, res) =>
     }
 });
 
+// Dashboard route
+app.get('/dashboard', requireAuth, (req, res) =>
+{
+    res.render('dashboard',
+    {
+        title: 'Dashboard',
+        user: req.session.user,
+        events: [],
+        bookings: [],
+        analytics: null
+    });
+});
+
 // DATABASE CONNECTION
 const dbURI = process.env.MONGO_URI; 
 
-mongoose.connect(dbURI)
-    .then(() => {
+mongoose.connect(dbURI).then(() =>
+    {
         console.log('Connected to MongoDB successfully!');
         app.listen(3000, () => console.log('Server running on http://localhost:3000'));
-    })
-    .catch((err) => console.log('Database connection error:', err));
+    }).catch((err) => console.log('Database connection error:', err));
 
 // TEMPORARY TEST FUNCTION
-async function createTestAdmin() {
-    try {
+async function createTestAdmin()
+{
+    try
+    {
         const existingUser = await User.findOne({ email: 'admin@smartevents.com' });
-        if (!existingUser) {
-            const newAdmin = new User({
+        if (!existingUser)
+        {
+            const newAdmin = new User(
+            {
                 name: 'System Admin',
                 email: 'admin@smartevents.com',
                 password: 'SuperSecretPassword123!', 
@@ -92,12 +108,14 @@ async function createTestAdmin() {
             });
             await newAdmin.save();
             console.log('Test Admin created successfully! Check Atlas to see the hashed password.');
-        } else {
+        } else
+        {
             console.log('Test Admin already exists in the database.');
         }
-    } catch (err) {
+    } catch (err)
+    {
         console.error('Error creating test admin:', err);
     }
-}
+}//createTestAdmin
 
 createTestAdmin();

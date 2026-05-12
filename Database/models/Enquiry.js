@@ -1,20 +1,25 @@
 const mongoose = require('mongoose');
 
-const enquirySchema = new mongoose.Schema({
-    name: {
+const enquirySchema = new mongoose.Schema(
+{
+    name:
+    {
         type: String,
         required: true
     },
-    email: {
+    email:
+    {
         type: String,
         required: true
     },
     subject : String,
-    message: {
+    message:
+    {
         type: String,
         required: true
     },
-    createdAt: {
+    createdAt:
+    {
         type: Date,
         default: Date.now
     }

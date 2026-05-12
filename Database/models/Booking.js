@@ -1,17 +1,21 @@
 const mongoose = require('mongoose');
 
-const bookingSchema = new mongoose.Schema({
-    user: {
+const bookingSchema = new mongoose.Schema(
+{
+    user:
+    {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User',
         required: true
     },
-    event: {
+    event:
+    {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Event',
         required: true
     },
-    bookingDate: {
+    bookingDate:
+    {
         type: Date,
         default: Date.now
     }

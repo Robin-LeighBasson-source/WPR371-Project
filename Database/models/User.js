@@ -1,29 +1,36 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt'); // Add this line
 
-const userSchema = new mongoose.Schema({
-    name: {
+const userSchema = new mongoose.Schema(
+{
+    name:
+    {
         type: String,
         required: true
     },
-    email: {
+    email:
+    {
         type: String,
         required: true,
         unique: true
     },
-    password: {
+    password:
+    {
         type: String,
         required: true
     },
-    role: {
+    role:
+    {
         type: String,
         enum: ['user', 'admin'],
         default: 'user'
     }
 });
 
-userSchema.pre('save', async function() {
-    if (!this.isModified('password')) {
+userSchema.pre('save', async function()
+{
+    if (!this.isModified('password'))
+    {
         return; 
     }
 
