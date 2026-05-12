@@ -14,7 +14,7 @@
   <% events.forEach(event => { %>
     <div class="card">
       <h3><%= event.title %></h3>
-      <p><%= event.date %> | <%= event.category %></p>
+      <p><%= new Date(event.date).toDateString() %> | <%= event.category %></p>
       <a href="/events/<%= event._id %>" class="btn">View Details</a>
     </div>
   <% }) %>

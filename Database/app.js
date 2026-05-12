@@ -15,6 +15,7 @@ const eventRoutes = require('./routes/eventRoutes');
 const authRoutes = require('./routes/authRoutes');
 const requireAuth = require('./middleware/authMiddleware');
 const bookingRoutes = require('./routes/bookingRoutes');
+const enquiryRoutes = require('./routes/enquiryRoutes');
 
 // Initialize app
 const app = express();
@@ -52,6 +53,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/events', eventRoutes);
 app.use('/auth', authRoutes);
 app.use('/bookings', bookingRoutes);
+app.use('/contact', enquiryRoutes);
 
 app.get('/', async (req, res) =>
 {
@@ -122,7 +124,7 @@ async function createTestAdmin()
             {
                 name: 'System Admin',
                 email: 'admin@smartevents.com',
-                password: 'SuperSecretPassword123!', 
+                password: 'admin123', 
                 role: 'admin'
             });
             await newAdmin.save();
