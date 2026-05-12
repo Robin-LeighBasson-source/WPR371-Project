@@ -14,6 +14,7 @@ const Enquiry = require('./models/Enquiry');
 const eventRoutes = require('./routes/eventRoutes');
 const authRoutes = require('./routes/authRoutes');
 const requireAuth = require('./middleware/authMiddleware');
+const bookingRoutes = require('./routes/bookingRoutes');
 
 // Initialize app
 const app = express();
@@ -50,6 +51,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/events', eventRoutes);
 app.use('/auth', authRoutes);
+app.use('/bookings', bookingRoutes);
 
 app.get('/', async (req, res) =>
 {
@@ -70,16 +72,33 @@ app.get('/', async (req, res) =>
 });
 
 // Dashboard route
-app.get('/dashboard', requireAuth, (req, res) =>
+app.get('/dashboard', requireAuth, async (req, res) =>
 {
-    res.render('dashboard',
+    try
     {
-        title: 'Dashboard',
-        user: req.session.user,
-        events: [],
-        bookings: [],
-        analytics: null
-    });
+        const events = await Event.find();
+
+        const bookings = await Booking.find({ user: req.session.user.id }).populate('event');
+
+        const formattedBookings = bookings.map(b =>
+        ({
+            eventTitle: b.event.title,
+            date: new Date(b.bookingDate).toDateString()
+        }));
+
+        res.render('dashboard',
+        {
+            title: 'Dashboard',
+            user: req.session.user,
+            events,
+            bookings: formattedBookings,
+            analytics: null
+        });
+    } catch (err)
+    {
+        console.error(err);
+        res.send('Dashboard error');
+    }
 });
 
 // DATABASE CONNECTION
