@@ -1,14 +1,18 @@
-<div class="container">
-    <h1><%= event.title %></h1>
-
-    <p><strong>Category:</strong><%= event.category %></p>
-    <p><strong>Date:</strong><%= new Date(event.date).toDateString() %></p>
-    <p><strong>Location:</strong><%= event.location %></p>
-    <p><strong>Description:</strong></p>
-    <p><%= event.description %></p>
-    <p><strong>Tickets Sold:</strong><%= event.ticketsSold %>/<%= event.totalCapacity %></p>
-
-    <br>
-    
+<section class="event-details-section" style="justify-content: center;">
+  <div class="event-details-card">
+  <div class="event-card">
     <a href="/" class="btn">Back to Events</a>
+    <div class="h-line"></div>
+            <h2><%= event.title %></h2>
+            <p class="body-text"><strong>Category:</strong><%= event.category %></p>
+            <p class="body-text"> <strong>Date:</strong><%= new Date(event.date).toDateString() %></p>
+            <p class="body-text"><strong>Location:</strong><%= event.location %></p>
+            <p class="body-text"><strong>Description:</strong></p>
+            <p class="body-text"><%= event.description %></p>
+            <p class="body-text"><strong>Tickets Sold:</strong><%= event.ticketsSold %>/<%= event.totalCapacity %></p>
+
+            <br>
+    
+
+  </div>
 </div>

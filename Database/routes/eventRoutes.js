@@ -6,6 +6,7 @@ const
 {
     searchEvents,
     getEventDetails,
+    getEventJSON,
     getAdminEvents,
     createEvent,
     deleteEvent,
@@ -25,6 +26,8 @@ router.post('/admin/delete/:id', requireAdmin, deleteEvent);
 router.get('/admin/edit/:id', requireAdmin, getEditEvent);
 // Update event
 router.post('/admin/edit/:id', requireAdmin, updateEvent);
+// API endpoint for event JSON
+router.get('/api/:id', getEventJSON);
 // Single event page
 router.get('/:id', getEventDetails);
 

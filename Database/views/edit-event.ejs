@@ -1,17 +1,45 @@
-<div class="container">
+<div class="auth-section">
+  <div class="auth-card">
     <h1>Edit Event</h1>
+    <form action="/events/admin/edit/<%= event._id %>" method="POST" class="auth-form">
+      <div class="form-group">
+        <label for="title">Event Title</label>
+        <input type="text" id="title" name="title" value="<%= event.title %>" required>
+      </div>
 
-    <form action="/events/admin/edit/<%= event._id %>" method="POST">
-        <input type="text" name="title" value="<%= event.title %>" required>
-        <select name="category" required>
-            <option value="Technology" <%= event.category === 'Technology' ? 'selected' : '' %>>Technology</option>
-            <option value="Music" <%= event.category === 'Music' ? 'selected' : '' %>>Music </option>
-            <option value="Business" <%= event.category === 'Business' ? 'selected' : '' %>>Business </option>
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+          <option value="Technology" <%= event.category === 'Technology' ? 'selected' : '' %>>Technology</option>
+          <option value="Music" <%= event.category === 'Music' ? 'selected' : '' %>>Music</option>
+          <option value="Business" <%= event.category === 'Business' ? 'selected' : '' %>>Business</option>
+          <option value="Sports" <%= event.category === 'Sports' ? 'selected' : '' %>>Sports</option>
+          <option value="Arts" <%= event.category === 'Arts' ? 'selected' : '' %>>Arts</option>
+          <option value="Food" <%= event.category === 'Food' ? 'selected' : '' %>>Food & Dining</option>
         </select>
-        <textarea name="description"><%= event.description %></textarea>
-        <input type="text" name="location" value="<%= event.location %>" required>
-        <input type="date" name="date" value="<%= event.date.toISOString().split('T')[0] %>" required>
-        <input type="number" name="totalCapacity" value="<%= event.totalCapacity %>" required>
-        <button type="submit">Update Event</button>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" name="description"><%= event.description %></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="location">Location</label>
+        <input type="text" id="location" name="location" value="<%= event.location %>" required>
+      </div>
+
+      <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date" value="<%= event.date.toISOString().split('T')[0] %>" required>
+      </div>
+
+      <div class="form-group">
+        <label for="totalCapacity">Total Capacity</label>
+        <input type="number" id="totalCapacity" name="totalCapacity" value="<%= event.totalCapacity %>" required>
+      </div>
+
+      <button type="submit" class="cta">Update Event</button>
     </form>
+  </div>
 </div>

@@ -2,19 +2,125 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %> | Smart Events</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <!-- Navbar -->
-  <%- include('partials/navbar') %>
+  <canvas id="webgl_canvas"></canvas>
+  <button id="theme_toggle" aria-label="Toggle light/dark mode">
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+    </svg>
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" />
+    </svg>
+  </button>
+  
+  <!-- Floating Header -->
+  <header id="floating_header">
+    <div class="header-content">
+      <a href="/" class="header-logo">Smart Events</a>
+      <div class="header-actions">
+        <button id="search_btn" aria-label="Search events" class="header-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </button>
+        <% if(user) { %>
+          <a href="/dashboard" class="header-btn login-btn">Dashboard</a>
+          <% if(user.role === 'admin') { %>
+            <a href="/events/admin/manage" class="header-btn login-btn">Admin Panel</a>
+          <% } %>
+          <a href="/auth/logout" class="header-btn signup-btn">Log Out</a>
+        <% } else { %>
+          <a href="/auth/login" class="header-btn login-btn">Log In</a>
+          <a href="/contact" class="header-btn login-btn">Contact</a>
+          <a href="/auth/register" class="header-btn signup-btn">Sign Up</a>
+        <% } %>
+      </div>
+    </div>
+  </header>
 
-  <!-- Main Content -->
-  <main class="container">
-    <%- body %>
-  </main>
 
-  <!-- Footer -->
-  <%- include('partials/footer') %>
+
+  <div id="scroll_container">
+    <main class="page-content">
+      <%- body %>
+    </main>
+  </div>
+
+
+  <footer id="global_footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Smart Events</h3>
+        <p>Discover, book, and enjoy unforgettable experiences.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/events">Events</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Account</h4>
+        <ul>
+          <% if(user) { %>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/auth/logout">Log Out</a></li>
+          <% } else { %>
+            <li><a href="/auth/login">Log In</a></li>
+            <li><a href="/auth/register">Sign Up</a></li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Smart Events. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Search Modal -->
+  <div id="search_modal" class="search-modal">
+    <div class="search-modal-content">
+      <button id="search_close" class="modal-close" onclick="closeSearchModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        Close
+      </button>
+      <h2>Search Events</h2>
+      <form id="search_form" method="GET" action="/events/search" onsubmit="handleSearchSubmit()">
+        <div class="form-group">
+          <label for="search_input">Event Title</label>
+          <input type="text" id="search_input" name="search" placeholder="Search by event title..." />
+        </div>
+        <div class="form-group">
+          <label for="category_filter">Category</label>
+          <select id="category_filter" name="category">
+            <option value="All">All Categories</option>
+            <option value="Music">Music</option>
+            <option value="Sports">Sports</option>
+            <option value="Technology">Technology</option>
+            <option value="Arts">Arts</option>
+            <option value="Business">Business</option>
+          </select>
+        </div>
+        <button type="submit" class="cta">
+          Search
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M1 6h10M6 1l5 5-5 5" />
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/scene.js"></script>
 </body>
 </html>

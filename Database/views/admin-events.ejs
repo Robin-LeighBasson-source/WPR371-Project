@@ -1,46 +1,424 @@
-<div class="container">
-  <h1>Manage Events</h1>
+<div class="admin-dashboard">
+  <div class="admin-header text-card">
+    <h1>Admin Dashboard</h1>
+    <p class="body-text">Welcome, <strong><%= user.name %></strong></p>
+  </div>
 
-  <form action="/events/admin/create" method="POST">
-    <input type="text" name="title" placeholder="Event Title" required/>
-    <select name="category" required>
-      <option value="Technology">Technology</option>
-      <option value="Music">Music</option>
-      <option value="Business">Business</option>
-    </select>
-    <textarea name="description" placeholder="Description"></textarea>
-    <input type="text" name="location" placeholder="Location" required />
-    <input type="date" name="date" required/>
-    <input type="number" name="totalCapacity" placeholder="Capacity" required/>
-    <button type="submit">Create Event</button>
-  </form>
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Total Events</div>
+      <div class="stat-number"><%= events.length %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Bookings</div>
+      <div class="stat-number"><%= stats.totalBookings || 0 %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Enquiries</div>
+      <div class="stat-number"><%= stats.pendingEnquiries || 0 %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Users</div>
+      <div class="stat-number"><%= stats.totalUsers || 0 %></div>
+    </div>
+  </div>
 
-  <table>
-    <tr>
-      <th>Title</th>
-      <th>Category</th>
-      <th>Location</th>
-      <th>Date</th>
-      <th>Capacity</th>
-      <th>Actions</th>
-    </tr>
+  <!-- Create Event Section -->
+  <div class="admin-section">
+    <h2>Create New Event</h2>
+    <form action="/events/admin/create" method="POST" class="auth-form">
+      <div class="form-group">
+        <label for="title">Event Title</label>
+        <input type="text" id="title" name="title" placeholder="Enter event title" required/>
+      </div>
 
-    <% events.forEach(event =>
-    { %>
-      <tr>
-        <td><%= event.title %></td>
-        <td><%= event.category %></td>
-        <td><%= event.location %></td>
-        <td><%= new Date(event.date).toDateString() %></td>
-        <td><%= event.totalCapacity %></td>
-        <td>
-          <a href="/events/admin/edit/<%= event._id %>" class="btn">Edit</a>
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+          <option value="">Select a category</option>
+          <option value="Technology">Technology</option>
+          <option value="Music">Music</option>
+          <option value="Business">Business</option>
+          <option value="Sports">Sports</option>
+          <option value="Arts">Arts</option>
+          <option value="Food">Food & Dining</option>
+        </select>
+      </div>
 
-          <form action="/events/admin/delete/<%= event._id %>" method="POST" style="display:inline;">
-          <button type="submit" class="btn">Delete</button>
-          </form>
-        </td>
-      </tr>
-    <% }) %>
-  </table>
+      <div class="form-group">
+        <label for="location">Location</label>
+        <input type="text" id="location" name="location" placeholder="Enter event location" required />
+      </div>
+
+      <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date" required/>
+      </div>
+
+      <div class="form-group">
+        <label for="totalCapacity">Total Capacity</label>
+        <input type="number" id="totalCapacity" name="totalCapacity" placeholder="Enter capacity" min="1" required/>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" placeholder="Enter event description" rows="4"></textarea>
+      </div>
+
+      <button type="submit" class="cta">Create Event</button>
+    </form>
+  </div>
+
+  <!-- Manage Events Section -->
+  <div class="admin-section">
+    <h2>Manage Events — <span class="tag-count"><%= events.length %> Total</span></h2>
+    
+    <% if(events.length === 0) { %>
+      <div class="empty-state">
+        <p class="body-text">No events created yet. Create your first event above!</p>
+      </div>
+    <% } else { %>
+      <div class="events-container">
+        <% events.forEach(event => { %>
+          <div class="event-management-card">
+            <div class="event-header">
+              <div>
+                <h3><%= event.title %></h3>
+                <div class="event-meta">
+                  <span class="tag"><%= event.category %></span>
+                  <span class="date-label"><%= new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+                </div>
+              </div>
+            </div>
+            <div class="event-body">
+              <div class="event-detail">
+                <span class="detail-label">Location</span>
+                <span class="detail-value"><%= event.location %></span>
+              </div>
+              <div class="event-detail">
+                <span class="detail-label">Capacity</span>
+                <span class="detail-value"><%= event.totalCapacity %></span>
+              </div>
+              <div class="event-detail">
+                <span class="detail-label">Bookings</span>
+                <span class="detail-value"><%= event.bookingCount || 0 %></span>
+              </div>
+            </div>
+            <div class="event-actions">
+              <a href="/events/admin/edit/<%= event._id %>" class="action-btn edit-btn">Edit</a>
+              <form action="/events/admin/delete/<%= event._id %>" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this event?');">
+                <button type="submit" class="action-btn delete-btn">Delete</button>
+              </form>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Enquiries Section -->
+  <div class="admin-section">
+    <h2>Enquiries</h2>
+    <% if(enquiries && enquiries.length > 0) { %>
+      <div class="enquiries-list">
+        <% enquiries.forEach(enquiry => { %>
+          <div class="enquiry-item">
+            <div class="enquiry-header">
+              <p class="enquiry-name"><strong><%= enquiry.name %></strong></p>
+              <p class="enquiry-email"><%= enquiry.email %></p>
+            </div>
+            <p class="enquiry-message"><%= enquiry.message %></p>
+            <p class="enquiry-date"><%= new Date(enquiry.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></p>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="empty-state">
+        <p class="body-text">No enquiries yet.</p>
+      </div>
+    <% } %>
+  </div>
 </div>
+
+<style>
+.admin-dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 5rem;
+}
+
+.admin-header {
+  margin-bottom: 3rem;
+  max-width: none;
+  border-top: var(--hairline) solid var(--card-border);
+  text-align: center;
+}
+
+.admin-header h1 {
+  margin-bottom: 1rem;
+}
+
+.admin-header .body-text {
+  margin: 0;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border: var(--hairline) solid var(--card-border);
+  border-radius: var(--card-radius);
+  padding: 1.5rem;
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  color: var(--accent);
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Admin Section */
+.admin-section {
+  background: var(--card-bg);
+  border: var(--hairline) solid var(--card-border);
+  border-radius: var(--card-radius);
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.admin-section h2 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tag-count {
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-weight: 400;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Events Container */
+.events-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.event-management-card {
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+  border: var(--hairline) solid var(--card-border);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: start;
+  transition: all 0.3s ease;
+}
+
+.event-management-card:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 1rem;
+}
+
+.event-header h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.1;
+}
+
+.event-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.event-meta .tag {
+  font-size: 0.55rem;
+  color: var(--accent);
+  margin: 0;
+  opacity: 1;
+  translate: none;
+}
+
+.date-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.event-body {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+}
+
+.event-detail {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+
+.detail-value {
+  font-size: 0.9rem;
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.event-actions {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  height: fit-content;
+}
+
+.action-btn {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: var(--hairline) solid var(--card-border);
+  border-radius: 0.25rem;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.edit-btn {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.edit-btn:hover {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.delete-btn {
+  color: #ff6b6b;
+  border-color: #ff6b6b;
+}
+
+.delete-btn:hover {
+  background: color-mix(in srgb, #ff6b6b 10%, transparent);
+}
+
+/* Enquiries Section */
+.enquiries-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.enquiry-item {
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+  border: var(--hairline) solid var(--card-border);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.enquiry-item:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.enquiry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.enquiry-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.enquiry-email {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.enquiry-message {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: var(--fg);
+}
+
+.enquiry-date {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin: 0;
+  text-align: right;
+}
+</style>
+</style>

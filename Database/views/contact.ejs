@@ -1,31 +1,51 @@
-<div class="container">
-  <h1>Contact Us</h1>
-  <% if(success)
-  { %>
-  <p><%= success %></p>
-<% } %>
+<section class="contact-section">
+  <div class="contact-card">
+    <div class="h-line"></div>
+    <div class="tag">Get in Touch</div>
+    <h2>CONTACT US</h2>
+    <p class="body-text">Have questions? We'd love to hear from you.</p>
 
-  <form action="/contact" method="POST">
-    <input type="text" name="name" placeholder="Full name" required />
-    <input type="email" name="email" placeholder="Email" required />
-    <textarea name="message" placeholder="Enquiry"></textarea>
-    <button type="submit">Send</button>
-  </form>
+    <% if(success) { %>
+      <p class="success-message"><%= success %></p>
+    <% } %>
 
-  <% if(user && user.role === 'admin')
-  { %>
-    <h2>User Enquiries</h2>
-    <% if(enquiries && enquiries.length > 0)
-    { %>
-      <% enquiries.forEach(enquiry =>
-      { %>
-        <div class="card">
-        <p><strong><%= enquiry.name %></strong>:<%= enquiry.message %></p>
+    <% if(!user || user.role !== 'admin') { %>
+      <form action="/contact" method="POST" class="contact-form">
+        <div class="form-group">
+          <input type="text" name="name" placeholder="Full name" required />
         </div>
-  <% }) %>
-<% } else
-    { %>
-      <p>No enquiries yet.</p>
-  <% } %>
-<% } %>
-</div>
+        <div class="form-group">
+          <input type="email" name="email" placeholder="Email" required />
+        </div>
+        <div class="form-group">
+          <textarea name="message" placeholder="Your message" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="cta">
+          Send Message
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M1 6h10M6 1l5 5-5 5" />
+          </svg>
+        </button>
+      </form>
+    <% } %>
+
+    <% if(user && user.role === 'admin') { %>
+      <div class="enquiries-section">
+        <h3>User Enquiries</h3>
+        <% if(enquiries && enquiries.length > 0) { %>
+          <div class="enquiries-list">
+            <% enquiries.forEach(enquiry => { %>
+              <div class="enquiry-item">
+                <p class="enquiry-name"><strong><%= enquiry.name %></strong></p>
+                <p class="enquiry-email"><%= enquiry.email %></p>
+                <p class="enquiry-message"><%= enquiry.message %></p>
+              </div>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <p class="body-text">No enquiries yet.</p>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+</section>

@@ -1,21 +1,79 @@
-<div class="container">
-  <h1>Available Events</h1>
-  <form method="GET" action="/events/search">
-    <input type="text" name="search" placeholder="Search events..." />
-    <select name="category">
-      <option value="">All Categories</option>
-      <option value="Technology">Technology</option>
-      <option value="Music">Music</option>
-      <option value="Business">Business</option>
-    </select>
-    <button type="submit">Filter</button>
-  </form>
+<div class="home-section">
+  <% if (events && events.length > 0) { %>
+    <% events.forEach((event, index) => { %>
+      <section id="s<%= index %>" class="event-section" data-event-id="<%= event._id %>">
+        <div class="event-card center" onclick="openEventModal('<%= event._id %>', '<%= event.title.replace(/'/g, "\\'") %>', '<%= (event.description || 'A captivating event experience awaits you.').replace(/'/g, "\\\\'") %>', '<%= new Date(event.date).toDateString() %>', '<%= event.category %>')">
+          <div class="h-line"></div>
+          <div class="tag"><%= index + 1 %>. — <%= event.category %></div>
+          <h2><%= event.title %></h2>
+          <p class="body-text">
+            <%= event.description || 'A captivating event experience awaits you.' %>
+          </p>
+          <div class="event-details">
+            <div class="detail">
+              <span class="detail-label">Date</span>
+              <span class="detail-value"><%= new Date(event.date).toDateString() %></span>
+            </div>
+            <div class="detail">
+              <span class="detail-label">Category</span>
+              <span class="detail-value"><%= event.category %></span>
+            </div>
+          </div>
+          <a class="cta" onclick="event.stopPropagation();" href="/events/<%= event._id %>">
+            View Details
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M1 6h10M6 1l5 5-5 5" />
+            </svg>
+          </a>
+        </div>
+      </section>
+    <% }); %>
+  <% } else { %>
+    <section id="s0">
+      <div class="event-card">
+        <div class="h-line"></div>
+        <div class="tag">No events are currently running</div>
+        <h1>Stay tuned!</h1>
+        <p class="body-text">
+          We're working hard to bring you amazing events. Check back soon for unforgettable experiences.
+        </p>
+        <a class="cta" href="/events">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M1 6h10M6 1l5 5-5 5" />
+          </svg>
+        </a>
+      </div>
+    </section>
+  <% } %>
+</div>
 
-  <% events.forEach(event => { %>
-    <div class="card">
-      <h3><%= event.title %></h3>
-      <p><%= new Date(event.date).toDateString() %> | <%= event.category %></p>
-      <a href="/events/<%= event._id %>" class="btn">View Details</a>
+<div id="event_modal" class="event-modal">
+  <div class="modal-content">
+    <button id="modal_close" class="modal-close" onclick="closeEventModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7" />
+      </svg>
+      Back
+    </button>
+    <div class="h-line"></div>
+    <div class="tag" id="modal_category">Category</div>
+    <h2 id="modal_title">Event Title</h2>
+    <p class="body-text" id="modal_description">Event description</p>
+    <div class="event-details">
+      <div class="detail">
+        <span class="detail-label">Date</span>
+        <span class="detail-value" id="modal_date">Date</span>
+      </div>
+      <div class="detail">
+        <span class="detail-label">Category</span>
+        <span class="detail-value" id="modal_category_value">Category</span>
+      </div>
     </div>
-  <% }) %>
+    <a id="modal_action_btn" class="cta" href="#" onclick="event.preventDefault(); window.location.href='/events/' + currentEventId;">
+      View Details
+      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M1 6h10M6 1l5 5-5 5" />
+      </svg>
+    </a>
+  </div>
 </div>

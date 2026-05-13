@@ -64,7 +64,8 @@ app.get('/', async (req, res) =>
         res.render('home',
         {
             title: 'Home',
-            events
+            events,
+            user: req.session.user || null
         });
     } catch (err)
     {

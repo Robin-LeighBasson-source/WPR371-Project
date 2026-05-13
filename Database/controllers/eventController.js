@@ -90,11 +90,41 @@ const getAdminEvents = async (req, res) =>
     try
     {
         const events = await Event.find().sort({ date: 1 });
+        
+        // Get total bookings
+        const totalBookings = await Booking.countDocuments();
+        
+        // Get total users
+        const User = require('../models/User');
+        const totalUsers = await User.countDocuments();
+        
+        // Get total enquiries
+        const Enquiry = require('../models/Enquiry');
+        const enquiries = await Enquiry.find().sort({ createdAt: -1 });
+        const pendingEnquiries = enquiries.length;
+        
+        // Add booking count for each event
+        const eventsWithBookings = await Promise.all(
+            events.map(async (event) => {
+                const bookingCount = await Booking.countDocuments({ event: event._id });
+                return {
+                    ...event.toObject(),
+                    bookingCount
+                };
+            })
+        );
 
         res.render('admin-events',
         {
             title: 'Manage Events',
-            events
+            events: eventsWithBookings,
+            user: req.session.user,
+            enquiries: enquiries,
+            stats: {
+                totalBookings,
+                totalUsers,
+                pendingEnquiries
+            }
         });
     } catch (err)
     {
@@ -217,11 +247,33 @@ const updateEvent = async (req, res) =>
     }
 }; //updateEvent
 
+// Get event details as JSON
+const getEventJSON = async (req, res) =>
+{
+    try
+    {
+        const event = await Event.findById(req.params.id);
+
+        if (!event)
+        {
+            return res.status(404).json({ error: 'Event not found.' });
+        }
+
+        res.json(event);
+
+    } catch (err)
+    {
+        console.error(err);
+        res.status(500).json({ error: 'Error loading event.' });
+    }
+}; //getEventJSON
+
 module.exports =
 {
     getAllEvents,
     searchEvents,
     getEventDetails,
+    getEventJSON,
     getAdminEvents, 
     createEvent,
     deleteEvent,

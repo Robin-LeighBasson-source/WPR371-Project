@@ -1,53 +1,74 @@
-<div class="container">
-  <h1>Welcome, <%= user.name %></h1>
-  <h2>Book Tickets</h2>
+<section class="dashboard-section">
+  <div class="dashboard-card">
+    <div class="h-line"></div>
+    <div class="tag">Your Dashboard</div>
+    <h2>Welcome, <%= user.name %></h2>
+    <p class="body-text">Manage your bookings and discover new events.</p>
 
-  <% if(events && events.length > 0)
-  { %>
-    <form action="/bookings/create" method="POST">
-      <select name="eventId">
-        <% events.forEach(event =>
-        { %>
-          <option value="<%= event._id %>"><%= event.title %></option>
-        <% }) %>
-      </select>
-
-      <button type="submit">Book Ticket</button>
-    </form>
-
-  <% } else
-  { %>
-    <p>No events available.</p>
-  <% } %>
-
-  <h2>My Bookings</h2>
-
-  <% if(bookings && bookings.length > 0)
-  { %>
-    <% bookings.forEach(b =>
-    { %>
-      <div class="card">
-        <p><%= b.eventTitle %> | <%= b.date %></p>
-        <form action="/bookings/cancel/<%= b.id %>" method="POST">
-        <button type="submit">Cancel Booking</button>
+    <% if(events && events.length > 0) { %>
+      <div class="booking-section">
+        <h3>Book Tickets</h3>
+        <form action="/bookings/create" method="POST" class="booking-form">
+          <div class="form-group">
+            <select name="eventId" required>
+              <option value="">Select an event</option>
+              <% events.forEach(event => { %>
+                <option value="<%= event._id %>"><%= event.title %></option>
+              <% }) %>
+            </select>
+          </div>
+          <button type="submit" class="cta">
+            Book Ticket
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M1 6h10M6 1l5 5-5 5" />
+            </svg>
+          </button>
         </form>
       </div>
-    <% }) %>
-  <% } else
-  { %>
-    <p>No bookings yet.</p>
-  <% } %>
+    <% } %>
 
-  <% if(user.role === 'admin' && analytics)
-  { %>
-    <h2>Admin Analytics</h2>
+    <% if(bookings && bookings.length > 0) { %>
+      <div class="bookings-section">
+        <h3>My Bookings</h3>
+        <div class="bookings-list">
+          <% bookings.forEach(b => { %>
+            <div class="booking-item">
+              <div>
+                <p class="booking-title"><%= b.eventTitle %></p>
+                <p class="booking-date"><%= b.date %></p>
+              </div>
+              <form action="/bookings/cancel/<%= b.id %>" method="POST" style="display:inline;">
+                <button type="submit" class="cta small-cta">Cancel</button>
+              </form>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    <% } else { %>
+      <p class="body-text">No bookings yet. <a href="/events">Explore events</a></p>
+    <% } %>
 
-    <div class="card">
-      <p>Total Bookings:<%= analytics.totalBookings %></p>
-      <p>Popular Event:<%= analytics.popularEvent %></p>
-      <p>Capacity Usage:<%= analytics.capacityUsage %>%</p>
-    </div>
-  <% } %>
+    <% if(user.role === 'admin' && analytics) { %>
+      <div class="analytics-section">
+        <h3>Admin Analytics</h3>
+        <div class="analytics-grid">
+          <div class="stat">
+            <span class="stat-num"><%= analytics.totalBookings %></span>
+            <span class="stat-label">Total Bookings</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Popular Event</span>
+            <span class="stat-value"><%= analytics.popularEvent %></span>
+          </div>
+          <div class="stat">
+            <span class="stat-num"><%= analytics.capacityUsage %>%</span>
+            <span class="stat-label">Capacity Usage</span>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</section>
   <br>
 
   <a href="/auth/logout">Logout</a>
