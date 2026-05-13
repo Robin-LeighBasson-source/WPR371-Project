@@ -1,8 +1,10 @@
+https://github.com/Robin-LeighBasson-source/WPR371-Project
+
 # Smart Events Management System
 
 A modern, full-stack web application for event management, built with Node.js, Express, MongoDB, and EJS. This system allows users to browse, book, and manage events while providing administrators with comprehensive event management tools.
 
-## 🚀 Features
+## Features
 
 ### For Users
 - **Browse Events**: View all available events with detailed information
@@ -19,7 +21,7 @@ A modern, full-stack web application for event management, built with Node.js, E
 - **Enquiry Management**: View and manage user enquiries
 - **Booking Analytics**: Monitor booking trends and capacity usage
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB with Mongoose ODM
@@ -28,7 +30,7 @@ A modern, full-stack web application for event management, built with Node.js, E
 - **Styling**: Custom CSS with glassmorphism design
 - **Middleware**: Method override, express layouts, session management
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 WPR371-Project/
@@ -73,7 +75,7 @@ WPR371-Project/
 └── README.md                      # This file
 ```
 
-## 🗄️ Database Schema
+## Database Schema
 
 ### User Model
 ```javascript
@@ -118,7 +120,7 @@ WPR371-Project/
 }
 ```
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Node.js (v14 or higher)
@@ -129,7 +131,7 @@ WPR371-Project/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/WPR371-Project.git
+   git clone https://github.com/Robin-LeighBasson-source/WPR371-Project.git
    cd WPR371-Project/Database
    ```
 
@@ -166,7 +168,7 @@ WPR371-Project/
 7. **Access the application**
    Open your browser and navigate to `http://localhost:3000`
 
-## 🔐 Default Admin Account
+##  Default Admin Account
 
 After running the seed script, you can create an admin account by:
 1. Registering a new user account
@@ -174,7 +176,7 @@ After running the seed script, you can create an admin account by:
 
 Or modify the registration logic to allow admin account creation.
 
-## 🎨 Design Features
+##  Design Features
 
 - **Glassmorphism UI**: Modern glass-like design with backdrop blur effects
 - **Dark/Light Theme**: Automatic theme switching with CSS custom properties
@@ -182,7 +184,7 @@ Or modify the registration logic to allow admin account creation.
 - **WebGL Background**: Animated particle effects using Three.js
 - **Smooth Animations**: CSS transitions and reveal animations
 
-## 📱 API Endpoints
+##  API Endpoints
 
 ### Authentication
 - `GET /auth/login` - Login page
@@ -212,7 +214,7 @@ Or modify the registration logic to allow admin account creation.
 - `GET /contact` - Contact page
 - `POST /contact` - Submit enquiry
 
-## 🔒 Security Features
+##  Security Features
 
 - **Password Hashing**: bcrypt for secure password storage
 - **Session Management**: Express sessions for authentication
@@ -220,7 +222,7 @@ Or modify the registration logic to allow admin account creation.
 - **Role-based Access**: Admin-only routes protected by middleware
 - **SQL Injection Prevention**: Mongoose ODM sanitizes queries
 
-## 🧪 Testing
+##  Testing
 
 ### Manual Testing Checklist
 - [ ] User registration and login
@@ -234,7 +236,7 @@ Or modify the registration logic to allow admin account creation.
 ### Sample Data
 Run `node seedEvents.js` to populate the database with sample events.
 
-## 🚀 Deployment
+##  Deployment
 
 ### Environment Variables for Production
 ```env
@@ -251,23 +253,27 @@ PORT=3000
 4. Start the server with `npm start`
 5. Set up a reverse proxy (nginx) for production
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create a feature branch (`git checkout -b feature/feature`)
+3. Commit your changes (`git commit -m 'Add feature'`)
+4. Push to the branch (`git push origin feature/feature`)
 5. Open a Pull Request
 
-## 📝 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Authors
+##  Authors
 
-- **Shane** - *Initial work* - [Your GitHub Profile](https://github.com/your-username)
+- **Sean**
+- **Robin**
+- **Tanya**
+- **Ryno**
+- **Jordan**
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - Built as part of WPR371 Web Programming course
 - Inspired by modern event management platforms
@@ -275,5 +281,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Special thanks to the Node.js and MongoDB communities
 
 ---
-
-**Note**: This is an educational project demonstrating full-stack web development concepts. For production use, additional security measures and testing would be recommended.
